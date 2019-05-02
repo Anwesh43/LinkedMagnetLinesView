@@ -20,7 +20,6 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
-val parts : Int = 2
 
 fun Int.inverse() : Float = 1f / this
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
@@ -36,7 +35,7 @@ fun Canvas.drawMagnetLine(i :Int, scale : Float, size : Float, sif : Float, pain
     val sf : Float = 1f - 2 * i
     save()
     translate(-size + i * 2 * size, 0f)
-    rotate(-90f * sf * scale.divideScale(i, parts) * sif)
+    rotate(-90f * sf * scale.divideScale(i, lines) * sif)
     drawLine(0f, 0f, size * sf, 0f, paint)
     restore()
 }
@@ -77,5 +76,25 @@ class MagnetLinesView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            scale += scale.updateValue(dir, lines, 1)
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }
