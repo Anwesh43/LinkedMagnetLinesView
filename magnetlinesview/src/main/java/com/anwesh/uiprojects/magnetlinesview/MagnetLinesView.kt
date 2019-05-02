@@ -222,7 +222,7 @@ class MagnetLinesView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : MagnetLinesView {
             val view : MagnetLinesView = MagnetLinesView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
