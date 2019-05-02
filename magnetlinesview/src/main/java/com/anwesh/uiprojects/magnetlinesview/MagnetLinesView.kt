@@ -43,7 +43,7 @@ fun Canvas.drawMagnetLine(i :Int, scale : Float, size : Float, sif : Float, pain
 fun Canvas.drawMLNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = w / (lines + 1)
+    val gap : Float = w / (nodes + 1)
     val size : Float = gap / sizeFactor
     val sif : Float = 1f - 2 * (i % 2)
     val sc1 : Float = scale.divideScale(0, 2)
@@ -52,7 +52,8 @@ fun Canvas.drawMLNode(i : Int, scale : Float, paint : Paint) {
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
     save()
-    translate(gap * (i + 1), h / 2 - (h / 2) * sif * sc2)
+    translate(gap * (i + 1), h / 2 - (h / 2 - size) * sif * sc2)
+    drawLine(-size, 0f, size, 0f, paint)
     for (j in 0..(lines - 1)) {
         save()
         drawMagnetLine(j, sc1, size, sif, paint)
