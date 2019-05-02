@@ -20,6 +20,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val delay : Long = 20
 
 fun Int.inverse() : Float = 1f / this
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
@@ -52,7 +53,7 @@ fun Canvas.drawMLNode(i : Int, scale : Float, paint : Paint) {
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
     save()
-    translate(gap * (i + 1), h / 2 - (h / 2 - size) * sif * sc2)
+    translate(gap * (i + 1), h / 2 - (h / 2 - size - paint.strokeWidth / 2) * sif * sc2)
     drawLine(-size, 0f, size, 0f, paint)
     for (j in 0..(lines - 1)) {
         save()
@@ -106,7 +107,7 @@ class MagnetLinesView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
